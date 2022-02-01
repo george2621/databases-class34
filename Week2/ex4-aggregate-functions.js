@@ -23,7 +23,7 @@ async function aggregateQueries() {
         `;
 
     const papersPublishedByFemale = `
-        SELECT  COUNT(paper_title)
+        SELECT  COUNT(DISTINCT paper_title)
         FROM authors a
         JOIN author_researchPapers ar
         ON a.author_no = ar.author_no
@@ -50,12 +50,8 @@ async function aggregateQueries() {
 
     const h_indexMinMaxPerUniversity = `
         SELECT university,MIN(h_index),MAX(h_index)
-        FROM authors a
-        JOIN author_researchPapers ar
-        ON a.author_no = ar.author_no
-        JOIN research_Papers r
-        ON r.paper_id = ar.paper_id
-        GROUP BY a.university;
+        FROM authors 
+        GROUP BY university;
         `;
 
     connection.connect();

@@ -14,8 +14,8 @@ async function joinsQueries() {
     const selectAuthorAndMentor = `
         SELECT a.author_name , m.author_name AS mentor
         FROM authors a
-        JOIN authors m
-        ON   a.mentor = m.author_no;
+        LEFT JOIN authors m
+        ON a.mentor = m.author_no;
         `;
 
     const selectAuthorAndPapers = `
