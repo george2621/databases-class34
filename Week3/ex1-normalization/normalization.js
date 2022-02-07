@@ -26,8 +26,6 @@ async function seedDatabase() {
     CREATE TABLE dinner(
     dinner_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     date DATE NOT NULL,
-    venue_code INT NOT NULL,
-    venue_description VARCHAR(250)
     )`;
 
     const foodTable = `
@@ -36,26 +34,43 @@ async function seedDatabase() {
     food_description VARCHAR(250)
     )`;
 
+    const venueTable = `
+    CREATE TABLE venue(
+        venue_code INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+        venue_description VARCHAR(250)
+        )`;
+
+
     const memberAndDinnerTable = `
     CREATE TABLE memberAndDinner(
-    member_id INT NOT NULL,
-    dinner_id INT NOT NULL,
-    PRIMARY KEY(member_id,dinner_id),
-    FOREIGN KEY(member_id) REFERENCES member(member_id),
-    FOREIGN KEY(dinner_id) REFERENCES dinner(dinner_id)
+        member_id INT NOT NULL,
+        dinner_id INT NOT NULL,
+        PRIMARY KEY(member_id, dinner_id),
+        FOREIGN KEY(member_id) REFERENCES member(member_id),
+        FOREIGN KEY(dinner_id) REFERENCES dinner(dinner_id)
     )`;
 
     const dinnerAndFoodTable = `
     CREATE TABLE dinnerAndFood(
-    food_code INT NOT NULL,
-    dinner_id INT NOT NULL,
-    PRIMARY KEY(food_code,dinner_id),
-    FOREIGN KEY(food_code) REFERENCES food(food_code),
-    FOREIGN KEY(dinner_id) REFERENCES dinner(dinner_id)
+        food_code INT NOT NULL,
+        dinner_id INT NOT NULL,
+        PRIMARY KEY(food_code, dinner_id),
+        FOREIGN KEY(food_code) REFERENCES food(food_code),
+        FOREIGN KEY(dinner_id) REFERENCES dinner(dinner_id)
+    )`;
+
+    const dinnerAndVenueTable = `
+    CREATE TABLE dinnerAndFood(
+        dinner_id INT NOT NULL,
+        venue_code INT NOT NULL,
+        PRIMARY KEY(venue_code, dinner_id),
+        FOREIGN KEY(venue_code) REFERENCES venue(venue_code),
+        FOREIGN KEY(dinner_id) REFERENCES dinner(dinner_id)
     )`;
 
 
-    const tables = [dropDatabaseIfExists, createDatabase, selectDatabase, createMemberTable, dinnerTable, foodTable, memberAndDinnerTable, dinnerAndFoodTable];
+
+    const tables = [dropDatabaseIfExists, createDatabase, selectDatabase, createMemberTable, dinnerTable, foodTable, venueTable, memberAndDinnerTable, dinnerAndFoodTable, dinnerAndVenueTable];
 
     try {
         tables.forEach(async table => {
